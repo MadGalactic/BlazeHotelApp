@@ -7,6 +7,8 @@ import com.madelinelora.Blaze.Hotel.App.data.entity.Room;
 import com.madelinelora.Blaze.Hotel.App.data.repository.GuestRepository;
 import com.madelinelora.Blaze.Hotel.App.data.repository.ReservationRepository;
 import com.madelinelora.Blaze.Hotel.App.data.repository.RoomRepository;
+import com.madelinelora.Blaze.Hotel.App.service.RoomReservationService;
+import com.madelinelora.Blaze.Hotel.App.service.model.RoomReservation;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -22,28 +24,21 @@ public class CLRunner implements CommandLineRunner {
     private final RoomRepository roomRepository;
     private final GuestRepository guestRepository;
     private final ReservationRepository reservationRepository;
+    private final RoomReservationService roomReservationService;
 
     // requires that Spring has a room repository that it can inject into the class
-    public CLRunner(RoomRepository roomRepository, GuestRepository guestRepository, ReservationRepository reservationRepository) {
+    public CLRunner(RoomRepository roomRepository, GuestRepository guestRepository, ReservationRepository reservationRepository, RoomReservationService roomReservationService) {
         this.roomRepository = roomRepository;
         this.guestRepository = guestRepository;
         this.reservationRepository = reservationRepository;
+        this.roomReservationService = roomReservationService;
     }
 
     // allows you to see data through the embedded database, as of yet there is no postgres database
     @Override
     public void run(String... args) throws Exception {
-        System.out.println("*** GUESTS ***");
-        List<Guest> guests = this.guestRepository.findAll();
-        guests.forEach(System.out::println);
-
-        System.out.println("*** ROOMS ***");
-        List<Room> rooms = this.roomRepository.findAll();
-        rooms.forEach(System.out::println);
-
-        System.out.println("*** RESERVATIONS ***");
-        List<Reservation> reservations = this.reservationRepository.findAll();
-        reservations.forEach(System.out::println);
+       List<RoomReservation> reservations = this.roomReservationService.getRoomReservationsForDate("2023-08-28");
+       reservations.forEach(System.out::println);
     }
 
 }

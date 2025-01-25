@@ -1,3 +1,0 @@
-# BlazeHotelApp
-
-testing
